@@ -1,0 +1,17 @@
+{
+	"name": "ds_azuresqldb_dw",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDBOLTP",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "movies_rating"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

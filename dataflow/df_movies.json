@@ -1,0 +1,35 @@
+{
+	"name": "df_movies",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_movies",
+						"type": "DatasetReference"
+					},
+					"name": "srcMovies"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_azuresqldb_dw",
+						"type": "DatasetReference"
+					},
+					"name": "skDW"
+				}
+			],
+			"transformations": [
+				{
+					"name": "FilterYears"
+				},
+				{
+					"name": "AggRating"
+				}
+			],
+			"script": "source(output(\n\t\tmovie as string,\n\t\ttitle as string,\n\t\tgenres as string,\n\t\tyear as string,\n\t\tRating as string,\n\t\t{Rotton Tomato} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> srcMovies\nsrcMovies filter(toInteger(year) >= 1910 && toInteger(year) <= 2000) ~> FilterYears\nFilterYears aggregate(groupBy(year),\n\tRating = avg(toInteger(Rating))) ~> AggRating\nAggRating sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1,\n\terrorHandlingOption: 'stopOnFirstError') ~> skDW"
+		}
+	}
+}

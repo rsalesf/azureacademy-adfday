@@ -1,0 +1,35 @@
+{
+	"name": "ds_json_datalake_dynamic",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AdslDataLake",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"directory_name": {
+				"type": "string"
+			},
+			"file_name": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().file_name",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().directory_name",
+					"type": "Expression"
+				},
+				"fileSystem": "raw"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
